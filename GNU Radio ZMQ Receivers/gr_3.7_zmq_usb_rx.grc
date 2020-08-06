@@ -113,7 +113,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>"127.0.0.1"</value>
+      <value>"sdr.rfhackers.com"</value>
     </param>
   </block>
   <block>
@@ -140,7 +140,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>"6550"</value>
+      <value>"6556"</value>
     </param>
   </block>
   <block>

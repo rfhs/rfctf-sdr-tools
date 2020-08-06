@@ -1,7 +1,6 @@
 options:
   parameters:
     author: Corey
-    catch_exceptions: 'True'
     category: '[GRC Hier Blocks]'
     cmake_opt: ''
     comment: ''
@@ -23,6 +22,7 @@ options:
     sizing_mode: fixed
     thread_safe_setters: ''
     title: ZMQ NBFM Receiver
+    window_size: ''
   states:
     bus_sink: false
     bus_source: false
@@ -36,7 +36,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '"127.0.0.1"'
+    value: '"sdr.rfhackers.com"'
   states:
     bus_sink: false
     bus_source: false
@@ -48,7 +48,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '"6550"'
+    value: '"6556"'
   states:
     bus_sink: false
     bus_source: false
@@ -165,7 +165,6 @@ blocks:
     alias: ''
     comment: ''
     hwm: '-1'
-    key: ''
     maxoutbuf: '0'
     minoutbuf: '0'
     pass_tags: 'False'
