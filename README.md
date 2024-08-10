@@ -8,4 +8,4 @@ https://zeromq.org/
 
 The server is sdr.rfhackers.com ports 6550-6570. By modifying the 'port' variable, you can access each of the different challenges.
 
-**Note:** If you're on a low bandwidth connection, it's recommended to save the IQ stream to a file first, then decode the information from the file. There is a file sync in 3.8 and a wav file sync in 3.10. They are disabled by default, right click and enable to save to a file and use in your favorite program.
+**Note:** If you're on a low bandwidth connection, it's recommended to save the IQ stream to a file first, then decode the information from the file. There is a file sink in 3.8 and a wav file sink in 3.10. They are disabled by default, right click and enable to save to a file and use in your favorite program.
