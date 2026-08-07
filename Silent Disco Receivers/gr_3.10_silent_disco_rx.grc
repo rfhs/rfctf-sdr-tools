@@ -1,0 +1,567 @@
+options:
+  parameters:
+    author: rfhs contributors
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: "Silent disco receiver.\n\nThe DEF CON silent disco is a Quiet Events\
+      \ system: analogue FM, stereo,\none carrier per audio channel, in the US 902-928\
+      \ MHz ISM band. Pick a\nchannel with the chooser at the top of the window and\
+      \ listen to it. The\nchooser carries the ten Quiet Events Ultra 900 colours,\
+      \ which are the\ncolours printed on the headset LEDs.\n\nThe radio retunes to\
+      \ follow the channel you pick and keeps the carrier\n300 kHz off centre, so\
+      \ nothing lands under the receiver's DC spike.\n\nReceive only. This flowgraph\
+      \ does not transmit."
+    copyright: ''
+    description: Silent disco channel receiver
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: silent_disco_rx
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: Silent Disco Receiver
+    window_size: (1200,900)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: audio_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '48000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [352, 12.0]
+    rotation: 0
+    state: enabled
+- name: chan_bw
+  id: variable
+  parameters:
+    comment: 'Per channel bandwidth. The plan puts channels
+
+      400 kHz apart at the closest.'
+    value: 200e3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [440, 12.0]
+    rotation: 0
+    state: enabled
+- name: chan_taps
+  id: variable
+  parameters:
+    comment: 'Blackman-Harris, not Hamming: a loud
+
+      neighbour 400 kHz away needs more than
+
+      53 dB of stopband to stay out.'
+    value: firdes.low_pass(1.0, samp_rate, chan_bw/2, chan_bw/4, window.WIN_BLACKMAN_HARRIS,
+      6.76)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [704, 12.0]
+    rotation: 0
+    state: enabled
+- name: channel
+  id: variable_qtgui_chooser
+  parameters:
+    comment: 'The channel selection feature. Ten Quiet Events
+
+      Ultra 900 channels, named by the colour of the
+
+      LED on the matching headset.'
+    gui_hint: 0,0,1,2
+    label: Silent Disco Channel
+    label0: ''
+    label1: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    labels: '["1 red 920.1", "2 yellow 920.7", "3 green 921.2", "4 purple 921.9",
+      "5 blue 922.3", "6 turquoise 922.8", "7 white 923.4", "8 orange 924.2", "9 pink
+      924.7", "10 mint 925.9"]'
+    num_opts: '0'
+    option0: '0'
+    option1: '1'
+    option2: '2'
+    option3: '3'
+    option4: '4'
+    options: '[920.1e6, 920.7e6, 921.2e6, 921.9e6, 922.3e6, 922.8e6, 923.4e6, 924.2e6,
+      924.7e6, 925.9e6]'
+    orient: Qt.QVBoxLayout
+    type: real
+    value: 922.3e6
+    widget: combo_box
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 108.0]
+    rotation: 0
+    state: enabled
+- name: center_freq
+  id: variable
+  parameters:
+    comment: 'Tune the radio if_offset below the channel so
+
+      the carrier never sits on the DC spike.'
+    value: channel - if_offset
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [216, 108.0]
+    rotation: 0
+    state: enabled
+- name: if_offset
+  id: variable
+  parameters:
+    comment: ''
+    value: 300e3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [552, 12.0]
+    rotation: 0
+    state: enabled
+- name: iq_file
+  id: variable
+  parameters:
+    comment: 'Only used by the File Source, which is disabled.
+
+      See README.md.'
+    value: '"silent_disco.cf32"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [216, 180.0]
+    rotation: 0
+    state: enabled
+- name: quad_rate
+  id: variable
+  parameters:
+    comment: 'samp_rate / 5. Decimates to 480 kHz, then
+
+      the demodulator decimates by 10 to audio.'
+    value: '480000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [256, 12.0]
+    rotation: 0
+    state: enabled
+- name: rf_gain
+  id: variable
+  parameters:
+    comment: ''
+    value: '40'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [632, 12.0]
+    rotation: 0
+    state: enabled
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '2400000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [168, 12.0]
+    rotation: 0
+    state: enabled
+- name: tau
+  id: variable
+  parameters:
+    comment: 'De-emphasis. 75 us in the US,
+
+      50 us in Europe.'
+    value: 75e-6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [864, 12.0]
+    rotation: 0
+    state: enabled
+- name: volume
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: 1,0,1,2
+    label: Volume
+    min_len: '200'
+    orient: Qt.Horizontal
+    rangeType: float
+    start: '0'
+    step: '0.05'
+    stop: '4'
+    value: '1.0'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 236.0]
+    rotation: 0
+    state: enabled
+- name: analog_agc2_xx_0
+  id: analog_agc2_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    attack_rate: '0.4'
+    comment: 'Quiet Events do not publish their deviation and
+
+      there is no FCC grant under the brand, so level
+
+      the audio rather than guess the number.'
+    decay_rate: 1e-3
+    gain: '1.0'
+    max_gain: '4000'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    reference: '0.35'
+    type: float
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [768, 236.0]
+    rotation: 0
+    state: enabled
+- name: analog_fm_demod_cf_0
+  id: analog_fm_demod_cf
+  parameters:
+    affinity: ''
+    alias: ''
+    audio_decim: '10'
+    audio_pass: '15000'
+    audio_stop: '17000'
+    chan_rate: quad_rate
+    comment: 'Mono recovers L+R, which is what a stereo
+
+      multiplex carries below 15 kHz, so this works
+
+      on mono and stereo transmitters alike. The
+
+      15 kHz audio filter is what keeps the 19 kHz
+
+      pilot out of the sound.'
+    deviation: 75e3
+    gain: '1.0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    tau: tau
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [528, 220.0]
+    rotation: 0
+    state: enabled
+- name: audio_sink_0
+  id: audio_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    device_name: ''
+    num_inputs: '1'
+    ok_to_block: 'True'
+    samp_rate: '48000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1120, 240.0]
+    rotation: 0
+    state: enabled
+- name: blocks_file_source_0
+  id: blocks_file_source
+  parameters:
+    affinity: ''
+    alias: ''
+    begin_tag: pmt.PMT_NIL
+    comment: 'Offline testing without a radio. Right click to
+
+      enable this and the Throttle, and disable the
+
+      Soapy RTLSDR Source. Make a capture with
+
+      make_silent_disco_iq.py.'
+    file: iq_file
+    length: '0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    repeat: 'True'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 356.0]
+    rotation: 0
+    state: disabled
+- name: blocks_multiply_const_vxx_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: volume
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [944, 244.0]
+    rotation: 0
+    state: enabled
+- name: blocks_throttle_0
+  id: blocks_throttle
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'Paces a file to real time. Not needed with
+
+      a radio, which paces itself.'
+    ignoretag: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samples_per_second: samp_rate
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [216, 364.0]
+    rotation: 0
+    state: disabled
+- name: blocks_wavfile_sink_0
+  id: blocks_wavfile_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    append: 'False'
+    bits_per_sample1: FORMAT_PCM_16
+    bits_per_sample2: FORMAT_PCM_16
+    bits_per_sample3: FORMAT_VORBIS
+    bits_per_sample4: FORMAT_PCM_16
+    comment: 'Right click and enable to record the channel
+
+      you are listening to.'
+    file: '"silent_disco.wav"'
+    format: FORMAT_WAV
+    nchan: '1'
+    samp_rate: audio_rate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1104, 348.0]
+    rotation: 0
+    state: disabled
+- name: freq_xlating_fir_filter_xxx_0
+  id: freq_xlating_fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    center_freq: if_offset
+    comment: 'Translate the wanted carrier down to zero and
+
+      decimate to quad_rate in one block. Change the
+
+      centre frequency here and you have picked a
+
+      different channel out of the same capture,
+
+      which is what the five channel version does
+
+      five times over.'
+    decim: '5'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    taps: chan_taps
+    type: ccf
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [288, 220.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_freq_sink_x_0
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    autoscale: 'False'
+    average: '0.2'
+    axislabels: 'True'
+    bw: samp_rate
+    color1: '"blue"'
+    comment: 'The whole capture. The other silent disco
+
+      carriers are the other humps.'
+    ctrlpanel: 'False'
+    fc: center_freq
+    fftsize: '2048'
+    freqhalf: 'True'
+    grid: 'True'
+    gui_hint: 2,0,2,1
+    label: Relative Gain
+    label1: capture
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '"Capture"'
+    nconnections: '1'
+    norm_window: 'False'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: complex
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    wintype: window.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [288, 452.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_freq_sink_x_1
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    autoscale: 'False'
+    average: '0.2'
+    axislabels: 'True'
+    bw: quad_rate
+    color1: '"blue"'
+    comment: 'The selected channel after filtering. One
+
+      hump, centred, roughly 200 kHz wide.'
+    ctrlpanel: 'False'
+    fc: channel
+    fftsize: '1024'
+    freqhalf: 'True'
+    grid: 'True'
+    gui_hint: 2,1,2,1
+    label: Relative Gain
+    label1: channel
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '"Selected Channel"'
+    nconnections: '1'
+    norm_window: 'False'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: complex
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    wintype: window.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [536, 452.0]
+    rotation: 0
+    state: enabled
+- name: soapy_rtlsdr_source_0
+  id: soapy_rtlsdr_source
+  parameters:
+    affinity: ''
+    agc: 'False'
+    alias: ''
+    bias: 'False'
+    bufflen: '16384'
+    center_freq: center_freq
+    comment: 'gr-soapy ships with GNU Radio 3.10, so this
+
+      needs nothing installed beyond GNU Radio and
+
+      the SoapySDR RTL-SDR module.'
+    dev_args: ''
+    freq_correction: '0'
+    gain: rf_gain
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    type: fc32
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 268.0]
+    rotation: 0
+    state: enabled
+
+connections:
+- [analog_agc2_xx_0, '0', blocks_multiply_const_vxx_0, '0']
+- [analog_fm_demod_cf_0, '0', analog_agc2_xx_0, '0']
+- [blocks_file_source_0, '0', blocks_throttle_0, '0']
+- [blocks_multiply_const_vxx_0, '0', audio_sink_0, '0']
+- [blocks_multiply_const_vxx_0, '0', blocks_wavfile_sink_0, '0']
+- [blocks_throttle_0, '0', freq_xlating_fir_filter_xxx_0, '0']
+- [blocks_throttle_0, '0', qtgui_freq_sink_x_0, '0']
+- [freq_xlating_fir_filter_xxx_0, '0', analog_fm_demod_cf_0, '0']
+- [freq_xlating_fir_filter_xxx_0, '0', qtgui_freq_sink_x_1, '0']
+- [soapy_rtlsdr_source_0, '0', freq_xlating_fir_filter_xxx_0, '0']
+- [soapy_rtlsdr_source_0, '0', qtgui_freq_sink_x_0, '0']
+
+metadata:
+  file_format: 1
+  grc_version: 3.10.9.2
