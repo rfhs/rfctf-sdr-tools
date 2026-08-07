@@ -37,6 +37,11 @@ from gnuradio.filter import firdes
 
 AUDIO_RATE = 48000
 
+# The stereo multiplex puts L+R below 15 kHz, the pilot at 19 kHz and L-R on a
+# 38 kHz subcarrier. Cutting at 15 kHz is what keeps the pilot out of the audio.
+AUDIO_PASS_HZ = 15000
+AUDIO_STOP_HZ = 17000
+
 # Quiet Events "Ultra 900" plan, used on the main and creator stages. The LED
 # colour on a headset is the channel, so a headset lying on a chair tells you
 # the frequency without scanning for it.
@@ -193,8 +198,8 @@ class silent_disco_rx(gr.top_block):
                 # pilot and the 38 kHz subcarrier out of the recording.
                 demod = analog.fm_demod_cf(
                     channel_rate=demod_rate, audio_decim=audio_decim,
-                    deviation=args.deviation, audio_pass=15000,
-                    audio_stop=17000, gain=1.0, tau=tau)
+                    deviation=args.deviation, audio_pass=AUDIO_PASS_HZ,
+                    audio_stop=AUDIO_STOP_HZ, gain=1.0, tau=tau)
                 nchan = 1
 
             self.connect(source, xlate, demod)
@@ -402,6 +407,27 @@ def main(argv=None):
     if not args.record and args.channel is None:
         print("error: nothing to do. Give --channel NAME to play one channel "
               "or --record to write every channel to WAV.", file=sys.stderr)
+        return 2
+
+    # The FM demodulator builds an audio low-pass with a 15 kHz passband and a
+    # 17 kHz stop. If the channel rate is too low to hold that, the filter
+    # designer fails deep inside GNU Radio with "band edges must be
+    # nondecreasing", which says nothing useful about the cause. Catch it here.
+    _, _demod_rate, _, _ = choose_rates(args.samp_rate, args.channel_bw, AUDIO_RATE)
+    if _demod_rate <= 2 * AUDIO_STOP_HZ:
+        print("error: --channel-bw %.1f kHz is too narrow. It leaves a channel "
+              "rate of %.1f kHz, and the audio filter needs more than %.1f kHz "
+              "to fit its %.0f kHz passband. Use at least %.0f kHz."
+              % (args.channel_bw / 1e3, _demod_rate / 1e3,
+                 2 * AUDIO_STOP_HZ / 1e3, AUDIO_PASS_HZ / 1e3,
+                 2 * AUDIO_STOP_HZ / 1e3),
+              file=sys.stderr)
+        return 2
+
+    if args.channel_bw >= args.samp_rate:
+        print("error: --channel-bw %.1f kHz does not fit inside a %.1f kHz "
+              "capture. Lower it or raise --samp-rate."
+              % (args.channel_bw / 1e3, args.samp_rate / 1e3), file=sys.stderr)
         return 2
 
     usable = (args.samp_rate - args.channel_bw) / 2.0
