@@ -109,3 +109,123 @@ The other receivers in this repository ship for 3.7 through 3.10. This one is
 3.10 only: it uses `gr-soapy`, which does not exist before 3.9, and 3.10 is the
 version it was written and tested against. A 3.9 port would be the same
 flowgraph; earlier versions would need `gr-osmosdr` instead.
+## Listening to every channel at once
+
+`silent_disco_rx.py` does what the flowgraph does, from the command line, and
+does it to every channel in the capture simultaneously.
+
+```
+./silent_disco_rx.py --plan ultra900 --record --record-dir wav
+```
+
+That tunes one radio, works out which of the ten Ultra 900 channels fit inside
+a 2.4 MHz capture, and demodulates all of them concurrently into one WAV file
+each:
+
+```
+centre        921.7500 MHz
+sample rate   2.400 Msps
+demod rate    480.0 kHz  (decimate 5)
+audio rate    48000 Hz  (decimate 10)
+channel taps  201, 200 kHz wide
+demodulator   mono (L+R), de-emphasis 75 us, audio AGC
+channels      5 demodulated concurrently
+   0   920.7000 MHz   -1050.0 kHz  2 yellow     record
+   1   921.2000 MHz    -550.0 kHz  3 green      record
+   2   921.9000 MHz    +150.0 kHz  4 purple     record
+   3   922.3000 MHz    +550.0 kHz  5 blue       record
+   4   922.8000 MHz   +1050.0 kHz  6 turquoise  record
+       920.1000 MHz  1 red        outside the capture
+       923.4000 MHz  7 white      outside the capture
+```
+
+It also plays a single channel, by colour, by number, or by frequency:
+
+```
+./silent_disco_rx.py --channel blue
+./silent_disco_rx.py --channel ch5
+./silent_disco_rx.py --channel 922.3
+```
+
+and will do both at once, so you can listen to one channel while recording all
+of them:
+
+```
+./silent_disco_rx.py --plan ultra900 --record --record-dir wav --channel blue
+```
+
+Useful options:
+
+| Option | Why |
+| --- | --- |
+| `--source hackrf` | any SoapySDR driver: `rtlsdr`, `hackrf`, `airspy`, `bladerf`, `lime`, `uhd`, `plutosdr` |
+| `--source file:capture.cf32` | work offline against a recorded capture |
+| `--samp-rate 8e6` | a wider radio reaches more channels at once |
+| `--stereo` | decode the stereo multiplex into left and right instead of mono L+R |
+| `--plan max45` | the 45-channel village plan instead of the main-stage one |
+| `--freqs 920.7,921.2,921.9` | ignore the plans, use these frequencies |
+| `--seconds 60` | stop after a minute |
+| `--list-plans` | print every built-in plan and exit |
+
+### Why N filters and not a channelizer
+
+The obvious alternative is a polyphase channelizer: capture wide, split into N
+uniform bins, demodulate each bin. It is much cheaper per channel, and for many
+channels on a regular grid it is the right answer. It is the wrong answer here,
+for one reason and one reason only: **the channel plan is not on a regular
+grid.**
+
+The Ultra 900 channels are at 920.1, 920.7, 921.2, 921.9, 922.3, 922.8, 923.4,
+924.2, 924.7 and 925.9 MHz. The gaps are 600, 500, 700, 400, 500, 600, 800, 500
+and 1200 kHz. The finest uniform grid that contains all of them has 100 kHz
+bins, so a channelizer would have to produce 24 bins to cover the range and
+then stitch two or three adjacent bins back together for every channel, because
+one channel is 200 kHz wide. That is more work than the thing it was supposed to
+save, and it constrains the tuner's centre frequency to the bin grid as well.
+
+`freq_xlating_fir_filter_ccf` has no such constraint. Each channel gets its own
+translation, so irregular spacing costs nothing, and each channel can have its
+own filter width, gain and output file.
+
+The efficiency argument that favours a channelizer does not bite at this scale.
+Five channels at 200 kHz with a 201-tap decimating filter is about 0.5 GMAC/s,
+which is nothing. On an eight-core desktop this runs at roughly **12 times real
+time in mono and 6 times real time in stereo**, so the constraint is USB
+bandwidth, not arithmetic.
+
+[RTLSDR-Airband](https://github.com/rtl-airband/RTLSDR-Airband) does use an FFT
+channelizer and is right to: it demodulates tens of narrow AM and NFM voice
+channels on a Raspberry Pi, where constant-cost-per-channel is the whole game,
+and it decimates to 8 or 16 kHz audio. Neither of those applies to five 200 kHz
+stereo music channels.
+
+## Proving it works
+
+`selftest.py` needs no radio. It generates a synthetic five-carrier silent
+disco signal, runs the receiver over it, and checks that each WAV file holds
+the tones that were put on that carrier and nothing else.
+
+```
+./selftest.py
+```
+
+It runs two **negative controls** as well, because a test that only ever
+passes is not a test:
+
+* **noise only** - no carriers at all. Must fail.
+* **mistuned 500 kHz** - real carriers, receiver pointed into the gaps between
+  them. Must fail.
+
+Measured on GNU Radio 3.10.9.2:
+
+| Case | Wanted tone over noise floor | Best other channel | Verdict |
+| --- | --- | --- | --- |
+| mono, five channels | 103 dB | 9 dB | pass |
+| stereo, five channels | 92 dB | 23 dB | pass |
+| noise only | 17 dB | 17 dB | correctly fails |
+| mistuned 500 kHz | 16 dB | 16 dB | correctly fails |
+
+The pass threshold is 30 dB. It sits 13 dB above everything the negative
+controls produce and 60 dB below everything the positive controls produce.
+Stereo separation measures 47 to 53 dB, which matches what this class of
+hardware is specified at.
