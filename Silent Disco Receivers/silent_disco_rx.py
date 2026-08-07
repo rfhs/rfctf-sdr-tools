@@ -341,8 +341,10 @@ def parse_args(argv):
     g.add_argument("--channel-bw", type=float, default=200e3,
                    help="per channel bandwidth in Hz (default 200e3)")
     g.add_argument("--deviation", type=float, default=75e3,
-                   help="peak FM deviation in Hz, used only when --no-agc is "
-                        "given (default 75e3)")
+                   help="peak FM deviation in Hz. Used only with --no-agc, "
+                        "and only in mono: the stereo path uses GNU Radio's "
+                        "wfm_rcv_pll, which fixes deviation at 75 kHz "
+                        "internally and ignores this (default 75e3)")
     g.add_argument("--deemph", type=float, default=75.0,
                    help="de-emphasis time constant in microseconds, 75 in the "
                         "US and 50 in Europe (default 75)")
@@ -449,6 +451,17 @@ def main(argv=None):
             # Playing one channel: put it comfortably off DC and ignore the
             # rest of the plan.
             center = play_freq + args.dc_guard * 5
+            # A file has no idea what it was tuned to. Guessing a centre from
+            # the requested channel is right for a radio and meaningless for a
+            # capture, where 0 Hz is wherever the recording was made. Without
+            # this warning the receiver translates to an empty part of the
+            # spectrum and plays noise, with nothing on screen to say why.
+            if str(args.source).startswith("file:"):
+                print("warning: --channel with a file source assumes the "
+                      "capture is centred on %.4f MHz. If it is not, you will "
+                      "hear noise. Give --center with the capture's true "
+                      "centre frequency in Hz."
+                      % (center / 1e6), file=sys.stderr)
         else:
             center = choose_center(all_freqs, usable, args.dc_guard)
 

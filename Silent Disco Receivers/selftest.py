@@ -35,9 +35,12 @@ RX = os.path.join(HERE, "silent_disco_rx.py")
 TONES = [400.0, 700.0, 1100.0, 1700.0, 2300.0, 2900.0, 3700.0, 4300.0]
 
 # A real carrier lands 60 dB or more over the in-band noise floor. The two
-# negative controls land under 15 dB. 30 dB sits clear of both.
+# negative controls land under 18 dB. 30 dB sits clear of both.
 MIN_SNR_DB = 30.0
 MIN_ISOLATION_DB = 30.0
+# Left and right must actually differ. Real hardware manages far more than
+# this; the threshold only has to catch a collapse to mono.
+MIN_SEPARATION_DB = 20.0
 
 
 def run(cmd):
@@ -121,6 +124,12 @@ def check(directory, label, expect_pass, nchan=None):
             worst_other = max(foreign) if foreign else -300.0
             good = (mine >= MIN_SNR_DB
                     and mine - worst_other >= MIN_ISOLATION_DB)
+            # The opposite track was previously printed but never checked, so a
+            # regression collapsing L and R into the same audio would still
+            # have passed. Require real separation when decoding stereo.
+            if unwanted_own:
+                sep = mine - levels.get(unwanted_own[0], -300.0)
+                good &= sep >= MIN_SEPARATION_DB
             all_good &= good
             extra = ""
             if unwanted_own:
