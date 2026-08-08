@@ -24,6 +24,7 @@
 
 import argparse
 import os
+import re
 import sys
 from fractions import Fraction
 
@@ -151,6 +152,57 @@ def _dc_clear(center, caught, dc_guard):
     return [nearest + dc_guard, nearest - dc_guard]
 
 
+def _set_sample_rate(src, rate):
+    """Set the sample rate, or explain the radio's fixed set of legal rates.
+
+    A USRP derives its rate from a master clock, so it takes only discrete
+    values and rejects anything else with a ValueError that lists every legal
+    rate - roughly 250 of them. Handing a user that wall of text at a demo is
+    useless, so catch it and name the two nearest usable rates instead.
+
+    This deliberately does NOT pick a rate automatically. The channel plan's
+    span has to fit inside the sample rate, and quietly substituting a lower
+    one would push the outermost channels out of the captured band and produce
+    silence with no explanation.
+    """
+    try:
+        src.set_sample_rate(0, rate)
+        return
+    except Exception as exc:
+        legal = sorted({float(m) for m in re.findall(r"\d+\.\d+", str(exc))
+                        if abs(float(m) - rate) > 0.5})
+        if not legal:
+            raise
+        below = [c for c in legal if c < rate]
+        above = [c for c in legal if c > rate]
+        print("error: this radio does not support --samp-rate %.6g."
+              % rate, file=sys.stderr)
+        if above:
+            print("       nearest at or above: --samp-rate %.6g" % above[0],
+                  file=sys.stderr)
+        if below:
+            print("       nearest below:       --samp-rate %.6g   (a lower "
+                  "rate may not span every channel)" % below[-1],
+                  file=sys.stderr)
+        raise SystemExit(2)
+
+
+def _soapy_source(soapy, driver, device_args):
+    """Open a SoapySDR source, tolerating drivers that reject bufflen.
+
+    bufflen is an RTL-SDR stream argument. UHD rejects it outright with
+    "Unsupported stream argument bufflen for channel 0", so a USRP could not
+    be opened at all. Ask for the larger buffer, and fall back to the driver's
+    own default when it is not understood.
+    """
+    try:
+        return soapy.source("driver=%s" % driver, "fc32", 1,
+                            device_args, "bufflen=16384", [""], [""])
+    except Exception:
+        return soapy.source("driver=%s" % driver, "fc32", 1,
+                            device_args, "", [""], [""])
+
+
 class silent_disco_rx(gr.top_block):
     def __init__(self, args, freqs, center):
         gr.top_block.__init__(self, "Silent Disco Receiver")
@@ -264,9 +316,8 @@ class silent_disco_rx(gr.top_block):
             return node
 
         from gnuradio import soapy
-        src = soapy.source("driver=%s" % args.source, "fc32", 1,
-                           args.device_args, "bufflen=16384", [""], [""])
-        src.set_sample_rate(0, args.samp_rate)
+        src = _soapy_source(soapy, args.source, args.device_args)
+        _set_sample_rate(src, args.samp_rate)
         src.set_frequency(0, center)
         src.set_frequency_correction(0, args.ppm)
         src.set_gain_mode(0, args.hw_agc)
