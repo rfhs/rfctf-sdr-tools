@@ -42,6 +42,13 @@ MIN_ISOLATION_DB = 30.0
 # this; the threshold only has to catch a collapse to mono.
 MIN_SEPARATION_DB = 20.0
 
+# The generator gates the audio between 1.0 and 0.1, so the source has
+# 20 dB of dynamic range. A 2:1 compressor must halve that and the
+# expander must put it back. Tolerances are loose because the envelope
+# follower has lag and the estimate is a percentile, not an oracle.
+COMPAND_SOURCE_DB = 20.0
+COMPAND_TOL_DB = 3.0
+
 
 def run(cmd):
     proc = subprocess.run(cmd, stdout=subprocess.PIPE,
@@ -147,6 +154,54 @@ def check(directory, label, expect_pass, nchan=None):
     return verdict
 
 
+def dynamic_range_db(path):
+    """Loud-to-quiet ratio in dB, from short-window RMS percentiles."""
+    fs, data = wavfile.read(path)
+    a = (data if data.ndim == 1 else data[:, 0]).astype(np.float64) / 32768.0
+    a = a[len(a) // 6:]                       # drop the envelope settling
+    win = max(1, int(0.05 * fs))
+    nw = len(a) // win
+    if nw < 8:
+        return 0.0
+    r = np.sqrt(np.mean(a[:nw * win].reshape(nw, win) ** 2, axis=1)) + 1e-12
+    return 20.0 * np.log10(np.percentile(r, 90) / np.percentile(r, 10))
+
+
+def check_compander(tmp):
+    """The expander must invert the compressor, and matter when absent."""
+    plain = os.path.join(tmp, "compand_plain.cf32")
+    comp = os.path.join(tmp, "compand_comp.cf32")
+    gen = [sys.executable, GEN, "--samp-rate", "2e6", "--offsets", "-400000",
+           "--tones", "400", "--seconds", "8.0", "--mono", "--noise", "0.001",
+           "--dynamics", "2", "--quiet-level", "0.1"]
+    run(gen + ["--out", plain])
+    run(gen + ["--compand", "--out", comp])
+
+    rx = [sys.executable, RX, "--samp-rate", "2e6", "--center", "922.4e6",
+          "--freqs", "922.0", "--record", "--no-agc", "--record-dir"]
+    out = {}
+    for label, src, extra in (("uncompanded, no expander", plain, []),
+                              ("companded, no expander", comp, []),
+                              ("companded, with expander", comp, ["--expander"])):
+        d = os.path.join(tmp, "cp_" + label.split(",")[0].replace(" ", "_")
+                         + ("_exp" if extra else ""))
+        run(rx + [d, "--source", "file:" + src] + extra)
+        wavs = sorted(glob.glob(os.path.join(d, "*.wav")))
+        out[label] = dynamic_range_db(wavs[0]) if wavs else 0.0
+
+    good = True
+    for label, want in (("uncompanded, no expander", COMPAND_SOURCE_DB),
+                        ("companded, no expander", COMPAND_SOURCE_DB / 2.0),
+                        ("companded, with expander", COMPAND_SOURCE_DB)):
+        got = out[label]
+        hit = abs(got - want) <= COMPAND_TOL_DB
+        good &= hit
+        print("    %-26s %6.1f dB   want %4.1f   %s"
+              % (label, got, want, "yes" if hit else "NO"))
+    print("  compander: %s" % ("PASS" if good else "FAIL"))
+    return good
+
+
 def main():
     tmp = tempfile.mkdtemp(prefix="silent_disco_selftest_")
     seconds = "3.0"
@@ -194,6 +249,9 @@ def main():
              "921.25,922.25", "--center", "921.75e6",
              "--record", "--record-dir", d])
         ok &= check(d, "mistuned 500 kHz", False, nchan=3)
+
+        print("compander: expander must invert the 2:1 compressor")
+        ok &= check_compander(tmp)
 
     finally:
         shutil.rmtree(tmp, ignore_errors=True)

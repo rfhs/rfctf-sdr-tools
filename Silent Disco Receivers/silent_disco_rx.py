@@ -23,6 +23,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 import argparse
+import math
 import os
 import re
 import sys
@@ -266,6 +267,29 @@ class silent_disco_rx(gr.top_block):
                         taps=[], fractional_bw=0.0)
                     self.connect(node, rr)
                     node = rr
+                if args.expander:
+                    # The transmitter compresses about 2:1 and the headphone
+                    # expands 1:2; demodulating without expanding gives
+                    # intelligible audio with the dynamics still squashed, so
+                    # quiet passages sit too loud and the result pumps.
+                    #
+                    # For a 2:1 law the expander gain is the envelope itself,
+                    # so this needs no arbitrary power: rectify, smooth,
+                    # multiply. The compressor's reference level is not
+                    # published, so this restores relative dynamics up to a
+                    # constant scale, which the AGC below then takes out.
+                    #
+                    # It sits before the AGC deliberately. After it, the AGC
+                    # would have already flattened the dynamics being restored.
+                    alpha = 1.0 - math.exp(
+                        -1.0 / (args.expander_tau * AUDIO_RATE))
+                    rect = blocks.abs_ff()
+                    env = gr_filter.single_pole_iir_filter_ff(alpha)
+                    mul = blocks.multiply_ff(1)
+                    self.connect(node, rect, env)
+                    self.connect(env, (mul, 1))
+                    self.connect(node, (mul, 0))
+                    node = mul
                 if args.agc:
                     # Quiet Events do not publish their deviation and there is
                     # no FCC grant under the brand, so level the audio instead
@@ -396,6 +420,14 @@ def parse_args(argv):
                         "and only in mono: the stereo path uses GNU Radio's "
                         "wfm_rcv_pll, which fixes deviation at 75 kHz "
                         "internally and ignores this (default 75e3)")
+    g.add_argument("--expander", action="store_true",
+                   help="undo the transmitter's 2:1 compressor. These systems "
+                        "compand, and without this the audio plays but its "
+                        "dynamics stay squashed. The exact law is not "
+                        "published, so this is offered rather than assumed")
+    g.add_argument("--expander-tau", type=float, default=0.01,
+                   help="expander envelope time constant in seconds "
+                        "(default 0.01)")
     g.add_argument("--deemph", type=float, default=75.0,
                    help="de-emphasis time constant in microseconds, 75 in the "
                         "US and 50 in Europe (default 75)")
