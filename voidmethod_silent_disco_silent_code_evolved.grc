@@ -1,0 +1,1118 @@
+options:
+  parameters:
+    alias: ''
+    author: voidmethod
+    catch_exceptions: 'True'
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_linking: dynamic
+    generate_options: qt_gui
+    generator_class_name: PythonQtGuiGenerator
+    generator_module: gnuradio.grc.workflows.python_qt_gui
+    hier_block_src_path: '.:'
+    id: voidmethod_silent_disco_decoder2
+    max_nouts: '0'
+    output_language: python
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    thread_safe_setters: ''
+    title: silent disco decoder
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: channel_11_enabled
+  id: variable_qtgui_check_box
+  parameters:
+    comment: ''
+    'false': 'False'
+    gui_hint: 1,0,1,1
+    label: ''
+    'true': 'True'
+    type: int
+    value: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [688, 48.0]
+    rotation: 0
+    state: enabled
+- name: channel_12_enabled
+  id: variable_qtgui_check_box
+  parameters:
+    comment: ''
+    'false': 'False'
+    gui_hint: 2,0,1,1
+    label: ''
+    'true': 'True'
+    type: int
+    value: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [688, 152.0]
+    rotation: 0
+    state: enabled
+- name: channel_13_enabled
+  id: variable_qtgui_check_box
+  parameters:
+    comment: ''
+    'false': 'False'
+    gui_hint: 3,0,1,1
+    label: ''
+    'true': 'True'
+    type: int
+    value: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [688, 256.0]
+    rotation: 0
+    state: enabled
+- name: channel_14_enabled
+  id: variable_qtgui_check_box
+  parameters:
+    comment: ''
+    'false': 'False'
+    gui_hint: 4,0,1,1
+    label: ''
+    'true': 'True'
+    type: int
+    value: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [688, 360.0]
+    rotation: 0
+    state: enabled
+- name: channel_15_enabled
+  id: variable_qtgui_check_box
+  parameters:
+    comment: ''
+    'false': 'False'
+    gui_hint: 5,0,1,1
+    label: ''
+    'true': 'True'
+    type: int
+    value: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [824, 48.0]
+    rotation: 0
+    state: enabled
+- name: channel_16_enabled
+  id: variable_qtgui_check_box
+  parameters:
+    comment: ''
+    'false': 'False'
+    gui_hint: 6,0,1,1
+    label: ''
+    'true': 'True'
+    type: int
+    value: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [824, 152.0]
+    rotation: 0
+    state: enabled
+- name: channel_17_enabled
+  id: variable_qtgui_check_box
+  parameters:
+    comment: ''
+    'false': 'False'
+    gui_hint: 7,0,1,1
+    label: ''
+    'true': 'True'
+    type: int
+    value: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [824, 256.0]
+    rotation: 0
+    state: enabled
+- name: channel_18_enabled
+  id: variable_qtgui_check_box
+  parameters:
+    comment: ''
+    'false': 'False'
+    gui_hint: 8,0,1,1
+    label: ''
+    'true': 'True'
+    type: int
+    value: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [824, 360.0]
+    rotation: 0
+    state: enabled
+- name: channel_19_enabled
+  id: variable_qtgui_check_box
+  parameters:
+    comment: ''
+    'false': 'False'
+    gui_hint: 9,0,1,1
+    label: ''
+    'true': 'True'
+    type: int
+    value: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [960, 48.0]
+    rotation: 0
+    state: enabled
+- name: channel_20_enabled
+  id: variable_qtgui_check_box
+  parameters:
+    comment: ''
+    'false': 'False'
+    gui_hint: 10,0,1,1
+    label: ''
+    'true': 'True'
+    type: int
+    value: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [960, 152.0]
+    rotation: 0
+    state: enabled
+- name: decimation
+  id: variable
+  parameters:
+    comment: ''
+    value: '15'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [192, 96.0]
+    rotation: 0
+    state: enabled
+- name: first_channel_freq
+  id: variable
+  parameters:
+    comment: ''
+    value: 657.400e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [408, 8.0]
+    rotation: 0
+    state: enabled
+- name: first_channel_freq
+  id: variable
+  parameters:
+    comment: ''
+    value: 93e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [408, 88.0]
+    rotation: 0
+    state: disabled
+- name: rf_center_freq
+  id: variable
+  parameters:
+    comment: ''
+    value: 659.875e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [296, 8.0]
+    rotation: 0
+    state: enabled
+- name: rf_center_freq
+  id: variable
+  parameters:
+    comment: ''
+    value: 95e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [296, 88.0]
+    rotation: 0
+    state: disabled
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: 6e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [200, 12]
+    rotation: 0
+    state: enabled
+- name: taps
+  id: variable_low_pass_filter_taps
+  parameters:
+    beta: '6.76'
+    comment: ''
+    cutoff_freq: 140e3
+    gain: '1.0'
+    samp_rate: samp_rate
+    value: ''
+    width: 40e3
+    win: window.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [360, 344.0]
+    rotation: 0
+    state: enabled
+- name: analog_wfm_rcv_0
+  id: analog_wfm_rcv
+  parameters:
+    affinity: ''
+    alias: ''
+    audio_decimation: '10'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    quad_rate: samp_rate / decimation
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [592, 520.0]
+    rotation: 0
+    state: enabled
+- name: analog_wfm_rcv_0_0
+  id: analog_wfm_rcv
+  parameters:
+    affinity: ''
+    alias: ''
+    audio_decimation: '10'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    quad_rate: samp_rate / decimation
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [592, 664.0]
+    rotation: 0
+    state: enabled
+- name: analog_wfm_rcv_0_0_0
+  id: analog_wfm_rcv
+  parameters:
+    affinity: ''
+    alias: ''
+    audio_decimation: '10'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    quad_rate: samp_rate / decimation
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [592, 816.0]
+    rotation: 0
+    state: enabled
+- name: analog_wfm_rcv_0_0_0_0
+  id: analog_wfm_rcv
+  parameters:
+    affinity: ''
+    alias: ''
+    audio_decimation: '10'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    quad_rate: samp_rate / decimation
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [592, 968.0]
+    rotation: 0
+    state: enabled
+- name: analog_wfm_rcv_0_0_0_0_0
+  id: analog_wfm_rcv
+  parameters:
+    affinity: ''
+    alias: ''
+    audio_decimation: '10'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    quad_rate: samp_rate / decimation
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [592, 1136.0]
+    rotation: 0
+    state: enabled
+- name: analog_wfm_rcv_0_0_0_0_0_0
+  id: analog_wfm_rcv
+  parameters:
+    affinity: ''
+    alias: ''
+    audio_decimation: '10'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    quad_rate: samp_rate / decimation
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [592, 1296.0]
+    rotation: 0
+    state: enabled
+- name: analog_wfm_rcv_0_0_0_0_0_0_0
+  id: analog_wfm_rcv
+  parameters:
+    affinity: ''
+    alias: ''
+    audio_decimation: '10'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    quad_rate: samp_rate / decimation
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [592, 1448.0]
+    rotation: 0
+    state: enabled
+- name: analog_wfm_rcv_0_0_0_0_0_0_0_0
+  id: analog_wfm_rcv
+  parameters:
+    affinity: ''
+    alias: ''
+    audio_decimation: '10'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    quad_rate: samp_rate / decimation
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [592, 1608.0]
+    rotation: 0
+    state: enabled
+- name: analog_wfm_rcv_0_0_0_0_0_0_0_0_0
+  id: analog_wfm_rcv
+  parameters:
+    affinity: ''
+    alias: ''
+    audio_decimation: '10'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    quad_rate: samp_rate / decimation
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [592, 1776.0]
+    rotation: 0
+    state: enabled
+- name: analog_wfm_rcv_0_0_0_0_0_0_0_0_0_0
+  id: analog_wfm_rcv
+  parameters:
+    affinity: ''
+    alias: ''
+    audio_decimation: '10'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    quad_rate: samp_rate / decimation
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [584, 1944.0]
+    rotation: 0
+    state: enabled
+- name: audio_sink_0
+  id: audio_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    device_name: ''
+    num_inputs: '1'
+    ok_to_block: 'True'
+    samp_rate: '48000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1360, 848.0]
+    rotation: 0
+    state: enabled
+- name: blocks_add_xx_0
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '10'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1032, 648.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_const_vxx_1
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: channel_11_enabled
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [808, 528.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_const_vxx_1_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: channel_12_enabled
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [808, 672.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_const_vxx_1_0_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: channel_13_enabled
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [808, 824.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_const_vxx_1_0_0_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: channel_14_enabled
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [808, 976.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_const_vxx_1_0_0_0_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: channel_15_enabled
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [808, 1144.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_const_vxx_1_0_0_0_0_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: channel_16_enabled
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [808, 1304.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_const_vxx_1_0_0_0_0_0_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: channel_17_enabled
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [808, 1456.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_const_vxx_1_0_0_0_0_0_0_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: channel_18_enabled
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [808, 1616.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_const_vxx_1_0_0_0_0_0_0_0_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: channel_19_enabled
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [808, 1784.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_const_vxx_1_0_0_0_0_0_0_0_0_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: channel_20_enabled
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [800, 1952.0]
+    rotation: 0
+    state: enabled
+- name: blocks_transcendental_0
+  id: blocks_transcendental
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Helps normalize
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: tanh
+    type: float
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1264, 744.0]
+    rotation: 0
+    state: enabled
+- name: freq_xlating_fir_filter_xxx_0
+  id: freq_xlating_fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    center_freq: first_channel_freq + 550e6 * (11 - 11) - rf_center_freq
+    comment: channel 11
+    decim: decimation
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    taps: taps
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [344, 504.0]
+    rotation: 0
+    state: enabled
+- name: freq_xlating_fir_filter_xxx_0_0
+  id: freq_xlating_fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    center_freq: first_channel_freq + 550e3 * (12 - 11) - rf_center_freq
+    comment: channel 12
+    decim: decimation
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    taps: taps
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [344, 648.0]
+    rotation: 0
+    state: enabled
+- name: freq_xlating_fir_filter_xxx_0_0_0
+  id: freq_xlating_fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    center_freq: first_channel_freq + 550e3 * (13 - 11) - rf_center_freq
+    comment: channel 13
+    decim: decimation
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    taps: taps
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [344, 800.0]
+    rotation: 0
+    state: enabled
+- name: freq_xlating_fir_filter_xxx_0_0_0_0
+  id: freq_xlating_fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    center_freq: first_channel_freq + 550e3 * (14 - 11) - rf_center_freq
+    comment: channel 14
+    decim: decimation
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    taps: taps
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [344, 952.0]
+    rotation: 0
+    state: enabled
+- name: freq_xlating_fir_filter_xxx_0_0_0_0_0
+  id: freq_xlating_fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    center_freq: first_channel_freq + 550e3 * (15 - 11) - rf_center_freq
+    comment: channel 15
+    decim: decimation
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    taps: taps
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [344, 1120.0]
+    rotation: 0
+    state: enabled
+- name: freq_xlating_fir_filter_xxx_0_0_0_0_0_0
+  id: freq_xlating_fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    center_freq: first_channel_freq + 550e3 * (16 - 11) - rf_center_freq
+    comment: channel 16
+    decim: decimation
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    taps: taps
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [344, 1280.0]
+    rotation: 0
+    state: enabled
+- name: freq_xlating_fir_filter_xxx_0_0_0_0_0_0_0
+  id: freq_xlating_fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    center_freq: first_channel_freq + 550e3 * (17 - 11) - rf_center_freq
+    comment: channel 17
+    decim: decimation
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    taps: taps
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [344, 1432.0]
+    rotation: 0
+    state: enabled
+- name: freq_xlating_fir_filter_xxx_0_0_0_0_0_0_0_0
+  id: freq_xlating_fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    center_freq: first_channel_freq + 550e3 * (18 - 11) - rf_center_freq
+    comment: channel 18
+    decim: decimation
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    taps: taps
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [344, 1592.0]
+    rotation: 0
+    state: enabled
+- name: freq_xlating_fir_filter_xxx_0_0_0_0_0_0_0_0_0
+  id: freq_xlating_fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    center_freq: first_channel_freq + 550e3 * (19 - 11) - rf_center_freq
+    comment: channel 19
+    decim: decimation
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    taps: taps
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [344, 1760.0]
+    rotation: 0
+    state: enabled
+- name: freq_xlating_fir_filter_xxx_0_0_0_0_0_0_0_0_0_0
+  id: freq_xlating_fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    center_freq: first_channel_freq + 550e3 * (20 - 11) - rf_center_freq
+    comment: channel 20
+    decim: decimation
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    taps: taps
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [336, 1928.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_waterfall_sink_x_0
+  id: qtgui_waterfall_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    axislabels: 'True'
+    bw: samp_rate
+    color1: '0'
+    color10: '0'
+    color2: '0'
+    color3: '0'
+    color4: '0'
+    color5: '0'
+    color6: '0'
+    color7: '0'
+    color8: '0'
+    color9: '0'
+    comment: ''
+    fc: rf_center_freq
+    fftsize: '4096'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: ''
+    int_max: '10'
+    int_min: '-140'
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '""'
+    nconnections: '1'
+    showports: 'False'
+    type: complex
+    update_time: '0.10'
+    wintype: window.WIN_BLACKMAN_hARRIS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [160, 328.0]
+    rotation: 0
+    state: enabled
+- name: rational_resampler_xxx_0
+  id: rational_resampler_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    decim: '5'
+    fbw: '0'
+    interp: '6'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    taps: '[]'
+    type: fff
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1136, 584.0]
+    rotation: 0
+    state: enabled
+- name: snippet_0
+  id: snippet
+  parameters:
+    alias: ''
+    code: "from PyQt5 import Qt, QtCore, QtGui\n\n\nclass ChannelMarkerOverlay(Qt.QWidget):\n\
+      \    \"\"\"Transparent channel-marker layer drawn over a waterfall canvas.\"\
+      \"\"\n\n    def __init__(\n        self,\n        canvas,\n        first_frequency,\n\
+      \        center_frequency,\n        bandwidth,\n        channel_half_width,\n\
+      \    ):\n        super().__init__(canvas)\n        self.canvas = canvas\n  \
+      \      self.first_frequency = first_frequency\n        self.center_frequency\
+      \ = center_frequency\n        self.bandwidth = bandwidth\n        self.channel_half_width\
+      \ = channel_half_width\n\n        self.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents,\
+      \ True)\n        self.setAttribute(QtCore.Qt.WA_TranslucentBackground, True)\n\
+      \        self.setAutoFillBackground(False)\n\n        self.canvas.installEventFilter(self)\n\
+      \        self.setGeometry(self.canvas.rect())\n        self.show()\n       \
+      \ self.raise_()\n\n    def eventFilter(self, watched, event):\n        if watched\
+      \ is self.canvas and event.type() in (\n            QtCore.QEvent.Resize,\n\
+      \            QtCore.QEvent.Show,\n        ):\n            self.setGeometry(self.canvas.rect())\n\
+      \            self.raise_()\n\n        return False\n\n    def paintEvent(self,\
+      \ event):\n        del event\n\n        painter = QtGui.QPainter(self)\n   \
+      \     painter.setRenderHint(QtGui.QPainter.Antialiasing, True)\n\n        line_pen\
+      \ = QtGui.QPen(QtGui.QColor(255, 40, 40, 230))\n        line_pen.setWidth(2)\n\
+      \        line_pen.setStyle(QtCore.Qt.DashLine)\n        painter.setPen(line_pen)\n\
+      \n        low_frequency = self.center_frequency - self.bandwidth / 2.0\n\n \
+      \       for index in range(10):\n            channel = 11 + index\n        \
+      \    center_frequency = self.first_frequency + index * 550e3\n            edge_frequencies\
+      \ = (\n                center_frequency - self.channel_half_width,\n       \
+      \         center_frequency + self.channel_half_width,\n            )\n\n   \
+      \         for edge_frequency in edge_frequencies:\n                normalized_x\
+      \ = (\n                    (edge_frequency - low_frequency) / self.bandwidth\n\
+      \                )\n                edge_x = normalized_x * self.width()\n\n\
+      \                if edge_x < 0 or edge_x > self.width():\n                 \
+      \   continue\n\n                painter.drawLine(\n                    QtCore.QPointF(edge_x,\
+      \ 0),\n                    QtCore.QPointF(edge_x, self.height()),\n        \
+      \        )\n\n            center_x = (\n                (center_frequency -\
+      \ low_frequency) / self.bandwidth\n            ) * self.width()\n\n        \
+      \    if center_x < 0 or center_x > self.width():\n                continue\n\
+      \n            label_rect = QtCore.QRectF(center_x - 28, 2, 56, 20)\n       \
+      \     painter.fillRect(\n                label_rect,\n                QtGui.QColor(0,\
+      \ 0, 0, 170),\n            )\n            painter.drawText(\n              \
+      \  label_rect,\n                QtCore.Qt.AlignCenter,\n                f\"\
+      CH {channel}\",\n            )\n\n        painter.end()\n\n\nwaterfall_widget\
+      \ = self._qtgui_waterfall_sink_x_0_win\n\n# GNU Radio's C++ plot cannot always\
+      \ be discovered through its Qwt base\n# class. Its canvas is still visible as\
+      \ a normal child QWidget, so draw a\n# transparent overlay directly on that\
+      \ canvas.\ncanvas = None\n\nfor child in waterfall_widget.findChildren(Qt.QWidget):\n\
+      \    class_name = child.metaObject().className()\n\n    if \"PlotCanvas\" in\
+      \ class_name or class_name == \"QwtPlotCanvas\":\n        canvas = child\n \
+      \       break\n\nif canvas is None:\n    print(\"Could not find the waterfall\
+      \ plot canvas\")\n    print(\"Available child widgets:\")\n\n    for child in\
+      \ waterfall_widget.findChildren(Qt.QWidget):\n        print(\"  \", child.metaObject().className())\n\
+      else:\n    print(\"Adding channel overlay to\", canvas.metaObject().className())\n\
+      \n    self._silent_disco_channel_overlay = ChannelMarkerOverlay(\n        canvas=canvas,\n\
+      \        first_frequency=self.first_channel_freq,\n        center_frequency=self.rf_center_freq,\n\
+      \        bandwidth=self.samp_rate,\n        channel_half_width=140e3,\n    )"
+    comment: ''
+    priority: '0'
+    section: main_after_init
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [112, 248.0]
+    rotation: 0
+    state: enabled
+- name: soapy_hackrf_source_0
+  id: soapy_hackrf_source
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: 'False'
+    bandwidth: '0'
+    center_freq: rf_center_freq
+    comment: ''
+    dev_args: ''
+    gain: '16'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    type: fc32
+    vga: '16'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [40, 480.0]
+    rotation: 0
+    state: enabled
+
+connections:
+- [analog_wfm_rcv_0, '0', blocks_multiply_const_vxx_1, '0']
+- [analog_wfm_rcv_0_0, '0', blocks_multiply_const_vxx_1_0, '0']
+- [analog_wfm_rcv_0_0_0, '0', blocks_multiply_const_vxx_1_0_0, '0']
+- [analog_wfm_rcv_0_0_0_0, '0', blocks_multiply_const_vxx_1_0_0_0, '0']
+- [analog_wfm_rcv_0_0_0_0_0, '0', blocks_multiply_const_vxx_1_0_0_0_0, '0']
+- [analog_wfm_rcv_0_0_0_0_0_0, '0', blocks_multiply_const_vxx_1_0_0_0_0_0, '0']
+- [analog_wfm_rcv_0_0_0_0_0_0_0, '0', blocks_multiply_const_vxx_1_0_0_0_0_0_0, '0']
+- [analog_wfm_rcv_0_0_0_0_0_0_0_0, '0', blocks_multiply_const_vxx_1_0_0_0_0_0_0_0,
+  '0']
+- [analog_wfm_rcv_0_0_0_0_0_0_0_0_0, '0', blocks_multiply_const_vxx_1_0_0_0_0_0_0_0_0,
+  '0']
+- [analog_wfm_rcv_0_0_0_0_0_0_0_0_0_0, '0', blocks_multiply_const_vxx_1_0_0_0_0_0_0_0_0_0,
+  '0']
+- [blocks_add_xx_0, '0', rational_resampler_xxx_0, '0']
+- [blocks_multiply_const_vxx_1, '0', blocks_add_xx_0, '0']
+- [blocks_multiply_const_vxx_1_0, '0', blocks_add_xx_0, '1']
+- [blocks_multiply_const_vxx_1_0_0, '0', blocks_add_xx_0, '2']
+- [blocks_multiply_const_vxx_1_0_0_0, '0', blocks_add_xx_0, '3']
+- [blocks_multiply_const_vxx_1_0_0_0_0, '0', blocks_add_xx_0, '4']
+- [blocks_multiply_const_vxx_1_0_0_0_0_0, '0', blocks_add_xx_0, '5']
+- [blocks_multiply_const_vxx_1_0_0_0_0_0_0, '0', blocks_add_xx_0, '6']
+- [blocks_multiply_const_vxx_1_0_0_0_0_0_0_0, '0', blocks_add_xx_0, '7']
+- [blocks_multiply_const_vxx_1_0_0_0_0_0_0_0_0, '0', blocks_add_xx_0, '8']
+- [blocks_multiply_const_vxx_1_0_0_0_0_0_0_0_0_0, '0', blocks_add_xx_0, '9']
+- [blocks_transcendental_0, '0', audio_sink_0, '0']
+- [freq_xlating_fir_filter_xxx_0, '0', analog_wfm_rcv_0, '0']
+- [freq_xlating_fir_filter_xxx_0_0, '0', analog_wfm_rcv_0_0, '0']
+- [freq_xlating_fir_filter_xxx_0_0_0, '0', analog_wfm_rcv_0_0_0, '0']
+- [freq_xlating_fir_filter_xxx_0_0_0_0, '0', analog_wfm_rcv_0_0_0_0, '0']
+- [freq_xlating_fir_filter_xxx_0_0_0_0_0, '0', analog_wfm_rcv_0_0_0_0_0, '0']
+- [freq_xlating_fir_filter_xxx_0_0_0_0_0_0, '0', analog_wfm_rcv_0_0_0_0_0_0, '0']
+- [freq_xlating_fir_filter_xxx_0_0_0_0_0_0_0, '0', analog_wfm_rcv_0_0_0_0_0_0_0, '0']
+- [freq_xlating_fir_filter_xxx_0_0_0_0_0_0_0_0, '0', analog_wfm_rcv_0_0_0_0_0_0_0_0,
+  '0']
+- [freq_xlating_fir_filter_xxx_0_0_0_0_0_0_0_0_0, '0', analog_wfm_rcv_0_0_0_0_0_0_0_0_0,
+  '0']
+- [freq_xlating_fir_filter_xxx_0_0_0_0_0_0_0_0_0_0, '0', analog_wfm_rcv_0_0_0_0_0_0_0_0_0_0,
+  '0']
+- [rational_resampler_xxx_0, '0', blocks_transcendental_0, '0']
+- [soapy_hackrf_source_0, '0', freq_xlating_fir_filter_xxx_0, '0']
+- [soapy_hackrf_source_0, '0', freq_xlating_fir_filter_xxx_0_0, '0']
+- [soapy_hackrf_source_0, '0', freq_xlating_fir_filter_xxx_0_0_0, '0']
+- [soapy_hackrf_source_0, '0', freq_xlating_fir_filter_xxx_0_0_0_0, '0']
+- [soapy_hackrf_source_0, '0', freq_xlating_fir_filter_xxx_0_0_0_0_0, '0']
+- [soapy_hackrf_source_0, '0', freq_xlating_fir_filter_xxx_0_0_0_0_0_0, '0']
+- [soapy_hackrf_source_0, '0', freq_xlating_fir_filter_xxx_0_0_0_0_0_0_0, '0']
+- [soapy_hackrf_source_0, '0', freq_xlating_fir_filter_xxx_0_0_0_0_0_0_0_0, '0']
+- [soapy_hackrf_source_0, '0', freq_xlating_fir_filter_xxx_0_0_0_0_0_0_0_0_0, '0']
+- [soapy_hackrf_source_0, '0', freq_xlating_fir_filter_xxx_0_0_0_0_0_0_0_0_0_0, '0']
+- [soapy_hackrf_source_0, '0', qtgui_waterfall_sink_x_0, '0']
+
+metadata:
+  file_format: 1
+  grc_version: 3.10.12.0
