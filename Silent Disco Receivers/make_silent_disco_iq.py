@@ -24,6 +24,7 @@ import sys
 
 from gnuradio import analog
 from gnuradio import blocks
+from gnuradio import filter as gr_filter
 from gnuradio import gr
 
 # Tones are chosen to be mutually non-harmonic within a channel's own pair so
@@ -32,8 +33,32 @@ DEFAULT_TONES = [400.0, 700.0, 1100.0, 1700.0, 2300.0, 2900.0, 3700.0, 4300.0]
 
 
 class silent_disco_source(gr.top_block):
+    def _compress(self, node, samp_rate, tau):
+        """2:1 compressor, the transmit half of the compander.
+
+        These systems squash the audio about 2:1 before modulating and expand
+        it 1:2 in the headphone. That pairing is where their quoted signal to
+        noise figure comes from; raw narrowband FM cannot deliver it.
+
+        For a 2:1 law the gain is the inverse square root of the envelope, so
+        this is rectify, smooth, sqrt, divide. The constant added to the
+        envelope keeps silence from dividing by zero.
+        """
+        alpha = 1.0 - math.exp(-1.0 / (tau * samp_rate))
+        rect = blocks.abs_ff()
+        env = gr_filter.single_pole_iir_filter_ff(alpha)
+        floor_ = blocks.add_const_ff(1e-3)
+        root = blocks.transcendental("sqrt", "float")
+        div = blocks.divide_ff(1)
+        self.connect(node, rect, env, floor_, root)
+        self.connect(root, (div, 1))
+        self.connect(node, (div, 0))
+        return div
+
     def __init__(self, offsets, tones, samp_rate, deviation, tau,
-                 stereo, levels, noise_amp, nsamples, out_path):
+                 stereo, levels, noise_amp, nsamples, out_path,
+                 compand=False, compand_tau=0.01, dynamics=0.0,
+                 quiet_level=0.1):
         gr.top_block.__init__(self, "Silent Disco Test Signal")
 
         combiner = blocks.add_vcc(1)
@@ -49,6 +74,25 @@ class silent_disco_source(gr.top_block):
                                        tone, 0.5, 0, 0)
             right = analog.sig_source_f(samp_rate, analog.GR_COS_WAVE,
                                         2.0 * tone, 0.5, 0, 0)
+
+            if dynamics > 0.0:
+                # A constant tone has a constant envelope, so a compander does
+                # nothing measurable to it. Gate the level between loud and
+                # quiet so there are real dynamics to squash and restore.
+                gate = analog.sig_source_f(samp_rate, analog.GR_SQR_WAVE,
+                                           dynamics, 1.0 - quiet_level,
+                                           quiet_level, 0)
+                gl = blocks.multiply_ff(1)
+                gr_r = blocks.multiply_ff(1)
+                self.connect(left, (gl, 0))
+                self.connect(gate, (gl, 1))
+                self.connect(right, (gr_r, 0))
+                self.connect(gate, (gr_r, 1))
+                left, right = gl, gr_r
+
+            if compand:
+                left = self._compress(left, samp_rate, compand_tau)
+                right = self._compress(right, samp_rate, compand_tau)
 
             pre_l = analog.fm_preemph(fs=samp_rate, tau=tau, fh=-1.0)
             pre_r = analog.fm_preemph(fs=samp_rate, tau=tau, fh=-1.0)
@@ -139,6 +183,19 @@ def parse_args(argv):
                         "75 in the US and 50 in Europe (default 75)")
     p.add_argument("--mono", action="store_true",
                    help="omit the pilot and the L-R subcarrier")
+    p.add_argument("--compand", action="store_true",
+                   help="apply the 2:1 compressor these systems use before "
+                        "modulating, so a receiver's expander can be tested")
+    p.add_argument("--compand-tau", type=float, default=0.01,
+                   help="compressor envelope time constant in seconds "
+                        "(default 0.01)")
+    p.add_argument("--dynamics", type=float, default=0.0,
+                   help="gate the audio between loud and quiet at this rate "
+                        "in Hz, giving the compander something to act on. "
+                        "0 disables (default 0)")
+    p.add_argument("--quiet-level", type=float, default=0.1,
+                   help="amplitude of the quiet half of the gate, so the "
+                        "default 0.1 is 20 dB of dynamic range (default 0.1)")
     p.add_argument("--noise", type=float, default=0.0,
                    help="Gaussian noise amplitude added to the sum "
                         "(default 0.0)")
@@ -181,6 +238,10 @@ def main(argv=None):
         noise_amp=args.noise,
         nsamples=nsamples,
         out_path=args.out,
+        compand=args.compand,
+        compand_tau=args.compand_tau,
+        dynamics=args.dynamics,
+        quiet_level=args.quiet_level,
     )
 
     print("writing %s" % args.out)
