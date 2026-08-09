@@ -34,7 +34,7 @@ from gnuradio.filter import firdes
 from gnuradio import gr
 
 try:
-    from gnuradio import osmosdr  # type: ignore
+    import osmosdr  # type: ignore
 except ImportError:  # pragma: no cover - file-mode use is still useful
     osmosdr = None
 
